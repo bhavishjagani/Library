@@ -5,12 +5,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-public class HelloApplication extends Application {
+public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 750);
-        stage.setTitle("Library Management System");
+        stage.setTitle("User Login");
         stage.setScene(scene);
         stage.show();
     }
@@ -32,7 +32,3 @@ public class HelloApplication extends Application {
 //         • Add and update borrower details.
 //         5. Database Integration:
 //         • Use MySQL to store book and borrower data.
-
-//Finish Prototype in Figma
-
-//Add Book, update book, delete book, search book --> use isbn, title/author, create additional frames when button is clicked, finalize colors, fonts, figma

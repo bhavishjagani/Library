@@ -14,6 +14,7 @@ public class BookDAO {
             statement.setString(1, book.getISBN());
             statement.setString(2, book.getTitle());
             statement.setString(3, book.getAuthor());
+            book.setQuantity(book.getQuantity()+1);
             statement.executeUpdate();
         }
         catch (Exception e) {
@@ -22,7 +23,7 @@ public class BookDAO {
     }
     public void updateBook(Book book) throws SQLException {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "UPDATE SET TITLE=?, AUTHOR=? WHERE ID=?";
+            String query = "UPDATE BOOKS SET TITLE=?, AUTHOR=? WHERE ID=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
@@ -33,11 +34,14 @@ public class BookDAO {
             throw new RuntimeException(e);
         }
     }
-    public void removeBook(Book book) throws SQLException {
+    public void removeBook(String ISBN, int quantity) throws SQLException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "DELETE FROM BOOKS WHERE ISBN=?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, book.getISBN());
+            statement.setString(1, ISBN);
+            if (quantity==0) {
+                throw new IllegalArgumentException();
+            }
             statement.executeUpdate();
         }
         catch (Exception e) {

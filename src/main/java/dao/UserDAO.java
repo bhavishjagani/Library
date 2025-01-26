@@ -1,4 +1,5 @@
 package dao;
+import models.Book;
 import models.User;
 import utils.DatabaseConnector;
 import java.sql.Connection;
@@ -57,5 +58,38 @@ public class UserDAO {
         }
         return null;
     }
+    public boolean borrowBook(Book book) throws SQLException {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            String query = "UPDATE BOOKS SET QUANTITY=QUANTITY-1 WHERE ID=? AND QUANTITY>0";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, book.getId());
+            statement.setInt(2, book.getQuantity());
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Book has been borrowed successfully.");
+                return true;
+            }
+            System.out.println("Book is either not available or ISBN is incorrect.");
+            return false;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public boolean returnBook(Book book) throws SQLException {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            String query = "UPDATE BOOKS SET QUANTITY=QUANTITY+1 WHERE ID=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, book.getId());
+            statement.setInt(2, book.getQuantity());
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Book has been returned successfully.");
+                return true;
+            }
+            System.out.println("Book ISBN is incorrect.");
+            return false;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
-//Add Admin, other DAO/Java classes, make changes to fxml if needed

@@ -1,47 +1,44 @@
 package dao;
-import models.Book;
-import models.User;
+import models.*;
 import utils.DatabaseConnector;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDAO {
-    public User validateLogin(String username, String password) throws SQLException {
+    public boolean validateLogin(String username, String password) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "SELECT * FROM USERS WHERE USERNAME=? AND PASSWORD=?";
+            String query = "SELECT * FROM USERS WHERE USERNAME=? AND PASSWORD=? AND ROLE=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
             statement.setString(2, password);
+            statement.setString(3, "User");
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setUsername(resultSet.getString("username"));
                 user.setRole(resultSet.getString("role"));
-                return user;
+                return true;
             }
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return false;
     }
-    public void newUser(User user) throws SQLException {
+    public void newUser(User user) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "INSERT INTO USERS (USERNAME, PASSWORD, ROLE) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
-            statement.setString(3, user.getRole());
+            statement.setString(3, "User");
             statement.executeUpdate();
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public User getAdmin(String role) throws SQLException {
+    public User getAdmin(String role) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "SELECT * FROM USERS WHERE ROLE=?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -58,7 +55,7 @@ public class UserDAO {
         }
         return null;
     }
-    public boolean borrowBook(Book book) throws SQLException {
+    public boolean borrowBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "UPDATE BOOKS SET QUANTITY=QUANTITY-1 WHERE ID=? AND QUANTITY>0";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -75,7 +72,7 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
-    public boolean returnBook(Book book) throws SQLException {
+    public boolean returnBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "UPDATE BOOKS SET QUANTITY=QUANTITY+1 WHERE ID=?";
             PreparedStatement statement = connection.prepareStatement(query);

@@ -32,3 +32,5 @@ public class Main extends Application {
 //         • Add and update borrower details.
 //         5. Database Integration:
 //         • Use MySQL to store book and borrower data.
+
+//Finish connecting other pages, **Change fx:id in other fxml pages**

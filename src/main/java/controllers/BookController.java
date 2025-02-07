@@ -10,9 +10,7 @@ import javafx.scene.control.*;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import models.Book;
-
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Objects;
 
 public class BookController {
@@ -22,8 +20,6 @@ public class BookController {
     private TextField title;
     @FXML
     private TextField author;
-    @FXML
-    private TextField quantity;
 
     private final BookDAO bookDAO = new BookDAO();
 
@@ -53,6 +49,7 @@ public class BookController {
             return;
         }
         Book book = new Book();
+        book.setISBN(ISBNText);
         book.setTitle(titleText);
         book.setAuthor(authorText);
         bookDAO.updateBook(book);
@@ -61,12 +58,11 @@ public class BookController {
     @FXML
     protected void removeBook() {
         String ISBNText = ISBN.getText();
-        String quantityText = quantity.getText();
         if (ISBNText.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Remove Book Fail");
             return;
         }
-        bookDAO.removeBook(ISBNText, Integer.parseInt(quantityText));
+        bookDAO.removeBook(ISBNText);
         showAlert(Alert.AlertType.CONFIRMATION, "Success", "Remove Book Success");
     }
     @FXML

@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.*;
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class UserController {
     private PasswordField password;
     @FXML
     private PasswordField reenterPassword;
+    @FXML
+    private HBox bookHBox;
 
     private final UserDAO userDAO = new UserDAO();
     private final AdminDAO adminDAO = new AdminDAO();
@@ -91,6 +94,10 @@ public class UserController {
         codeReducer(e, "user-login.fxml", "User Login");
     }
     @FXML
+    protected void backToBookBorrowAndReturn(ActionEvent e) throws Exception {
+        codeReducer(e, "book-borrow-and-return.fxml", "Book Borrow And Return");
+    }
+    @FXML
     protected void toNewSignup(ActionEvent e) throws Exception {
         codeReducer(e, "new-signup.fxml", "New Signup");
     }
@@ -101,6 +108,11 @@ public class UserController {
     @FXML
     protected void toAdminBookManagement(ActionEvent e) throws Exception {
         codeReducer(e, "admin-book-management.fxml", "Admin Book Management");
+    }
+    @FXML
+    protected void toAllBooks(ActionEvent e) throws Exception {
+        codeReducer(e, "all-books.fxml", "All Books");
+        bookHBox.setAccessibleText(userDAO.getAllBooks());
     }
     @FXML
     protected void codeReducer(ActionEvent e, String className, String title) throws IOException {

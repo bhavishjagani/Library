@@ -3,6 +3,7 @@ import models.*;
 import utils.DatabaseConnector;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
     public boolean validateLogin(String username, String password) {
@@ -71,7 +72,7 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
-    public String getAllBooks() {
+    public List<Book> getAllBooks() {
         ArrayList<Book> books = new ArrayList<>();
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "SELECT * FROM BOOKS";
@@ -88,6 +89,6 @@ public class UserDAO {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return String.valueOf(books);
+        return books;
     }
 }

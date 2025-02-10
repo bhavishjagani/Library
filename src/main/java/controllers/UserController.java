@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.*;
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class UserController {
     @FXML
     private PasswordField reenterPassword;
     @FXML
-    private HBox bookHBox;
+    private TextField bookTextField = new TextField();
 
     private final UserDAO userDAO = new UserDAO();
     private final AdminDAO adminDAO = new AdminDAO();
@@ -110,9 +109,20 @@ public class UserController {
         codeReducer(e, "admin-book-management.fxml", "Admin Book Management");
     }
     @FXML
+    public void initialize() {
+        if (bookTextField != null) {
+            bookTextField.setText(userDAO.getAllBooks().get(0).getTitle());
+        }
+    }
+    //Use Table View for setting text
+    //Borrow and Return Methods
+    @FXML
     protected void toAllBooks(ActionEvent e) throws Exception {
+//        System.out.println(bookTextField.getText());
+//        System.out.println(userDAO.getAllBooks().get(0).getTitle());
+//        String booksText = userDAO.getAllBooks().get(0).getTitle();
+//        bookTextField.setText(booksText);
         codeReducer(e, "all-books.fxml", "All Books");
-        bookHBox.setAccessibleText(userDAO.getAllBooks());
     }
     @FXML
     protected void codeReducer(ActionEvent e, String className, String title) throws IOException {

@@ -6,11 +6,12 @@ import java.sql.*;
 public class BookDAO {
     public void addBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "INSERT INTO BOOKS (ISBN, TITLE, AUTHOR) VALUES (?, ?, ?)";
+            String query = "INSERT INTO BOOKS (ISBN, TITLE, AUTHOR, QUANTITY) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, book.getISBN());
             statement.setString(2, book.getTitle());
             statement.setString(3, book.getAuthor());
+            statement.setInt(4, book.getQuantity());
             statement.executeUpdate();
         }
         catch (Exception e) {
@@ -19,12 +20,13 @@ public class BookDAO {
     }
     public void updateBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "UPDATE BOOKS SET TITLE=?, AUTHOR=? WHERE ISBN=?";
+            String query = "UPDATE BOOKS SET TITLE=?, AUTHOR=?, QUANTITY=?, WHERE ISBN=?";
             System.out.println(book.getISBN());
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
-            statement.setString(3, book.getISBN());
+            statement.setInt(3, book.getQuantity());
+            statement.setString(4, book.getISBN());
             System.out.println(book.getISBN());
             statement.executeUpdate();
         }
@@ -54,6 +56,7 @@ public class BookDAO {
                 book.setISBN(resultSet.getString("ISBN"));
                 book.setTitle(resultSet.getString("TITLE"));
                 book.setAuthor(resultSet.getString("AUTHOR"));
+                book.setQuantity(resultSet.getInt("QUANTITY"));
                 return book;
             }
         }

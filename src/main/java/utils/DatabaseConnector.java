@@ -22,7 +22,7 @@ public class DatabaseConnector {
         codeReducer(connection, query);
     }
     public static void createBookTable(Connection connection) throws SQLException {
-        String query = "CREATE TABLE IF NOT EXISTS BOOKS (ID INT AUTO_INCREMENT PRIMARY KEY, ISBN VARCHAR (13), TITLE VARCHAR (250), AUTHOR VARCHAR (100), QUANTITY INT DEFAULT 1)";
+        String query = "CREATE TABLE IF NOT EXISTS BOOKS (ID INT AUTO_INCREMENT PRIMARY KEY, ISBN VARCHAR (13), TITLE VARCHAR (250), AUTHOR VARCHAR (100), QUANTITY INT DEFAULT 1, STATUS VARCHAR (10) DEFAULT 'available')";
         codeReducer(connection, query);
     }
     public static void codeReducer(Connection connection, String createTableQuery) throws SQLException {

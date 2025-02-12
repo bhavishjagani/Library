@@ -19,6 +19,10 @@ public class UserController {
     private PasswordField reenterPassword;
     @FXML
     private TextField bookTextField = new TextField();
+    @FXML
+    private TextField borrowISBN;
+    @FXML
+    private TextField returnISBN;
 
     private final UserDAO userDAO = new UserDAO();
     private final AdminDAO adminDAO = new AdminDAO();
@@ -89,6 +93,31 @@ public class UserController {
         backToUserLogin(e);
     }
     @FXML
+    protected void borrowBook() {
+        String ISBNText = borrowISBN.getText();
+        if (ISBNText.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please enter a book ISBN to borrow.");
+            return;
+        }
+        Book book = new Book();
+        book.setISBN(ISBNText);
+        boolean success = userDAO.borrowBook(book);
+        showAlert(success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR, success ? "Success" : "Error", success ? "Book borrowed successfully." : "Book is not available.");
+    }
+
+    @FXML
+    protected void returnBook() {
+        String ISBNText = returnISBN.getText();
+        if (ISBNText.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please enter a book ISBN to return.");
+            return;
+        }
+        Book book = new Book();
+        book.setISBN(ISBNText);
+        boolean success = userDAO.returnBook(book);
+        showAlert(success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR, success ? "Success" : "Error", success ? "Book returned successfully." : "Invalid ISBN or book return failed.");
+    }
+    @FXML
     protected void backToUserLogin(ActionEvent e) throws Exception {
         codeReducer(e, "user-login.fxml", "User Login");
     }
@@ -110,12 +139,10 @@ public class UserController {
     }
     @FXML
     public void initialize() {
-        if (bookTextField != null) {
+        if (bookTextField != null && !userDAO.getAllBooks().isEmpty()) {
             bookTextField.setText(userDAO.getAllBooks().get(0).getTitle());
         }
     }
-    //Use Table View for setting text
-    //Borrow and Return Methods
     @FXML
     protected void toAllBooks(ActionEvent e) throws Exception {
 //        System.out.println(bookTextField.getText());

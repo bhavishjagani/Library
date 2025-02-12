@@ -2,8 +2,7 @@ package dao;
 import models.*;
 import utils.DatabaseConnector;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class UserDAO {
     public boolean validateLogin(String username, String password) {
@@ -42,9 +41,9 @@ public class UserDAO {
     }
     public boolean borrowBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "UPDATE BOOKS WHERE ID=?";
+            String query = "UPDATE BOOKS SET STATUS = 'borrowed', QUANTITY=QUANTITY-1 WHERE ISBN=?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, book.getId());
+            statement.setString(1, book.getISBN());
             if (statement.executeUpdate() > 0) {
                 System.out.println("Book has been borrowed successfully.");
                 return true;
@@ -58,9 +57,9 @@ public class UserDAO {
     }
     public boolean returnBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "UPDATE BOOKS WHERE ID=?";
+            String query = "UPDATE BOOKS SET STATUS = 'available', QUANTITY=QUANTITY+1 WHERE ISBN=?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, book.getId());
+            statement.setString(1, book.getISBN());
             if (statement.executeUpdate() > 0) {
                 System.out.println("Book has been returned successfully.");
                 return true;

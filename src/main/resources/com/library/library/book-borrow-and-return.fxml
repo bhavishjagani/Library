@@ -27,12 +27,12 @@
 
             <HBox spacing="10.0">
                 <Label text="Borrow Book:" style="-fx-font-size: 16px; -fx-font-family: Arial; -fx-font-weight: bold;" textFill="black"/>
-                <TextField promptText="Enter ISBN" style="-fx-font-size: 14px; -fx-font-family: Arial; -fx-background-radius: 20; -fx-pref-width: 200px;"/>
+                <TextField fx:id="borrowISBN" promptText="Enter ISBN" style="-fx-font-size: 14px; -fx-font-family: Arial; -fx-background-radius: 20; -fx-pref-width: 200px;"/>
             </HBox>
 
             <HBox spacing="10.0">
                 <Label text="Return Book:" style="-fx-font-size: 16px; -fx-font-family: Arial; -fx-font-weight: bold;" textFill="black"/>
-                <TextField promptText="Enter ISBN" style="-fx-font-size: 14px; -fx-font-family: Arial; -fx-background-radius: 20; -fx-pref-width: 200px;"/>
+                <TextField fx:id="returnISBN" promptText="Enter ISBN" style="-fx-font-size: 14px; -fx-font-family: Arial; -fx-background-radius: 20; -fx-pref-width: 200px;"/>
             </HBox>
 
             <HBox alignment="CENTER">
@@ -41,6 +41,14 @@
                 <padding>
                     <Insets top="50.0"/>
                 </padding>
+            </HBox>
+
+            <HBox alignment="CENTER">
+                <Button alignment="CENTER" textAlignment="CENTER" text="Borrow Book" textFill="#FFFFFF" style="-fx-background-color: #5A1898; -fx-background-radius: 15; -fx-pref-width: 200px; -fx-pref-height: 26px; -fx-font-family: Arial; -fx-font-size: 18px; -fx-font-weight: bold;" onAction="#borrowBook"/>
+            </HBox>
+
+            <HBox alignment="CENTER">
+                <Button alignment="CENTER" textAlignment="CENTER" text="Return Book" textFill="#FFFFFF" style="-fx-background-color: #5A1898; -fx-background-radius: 15; -fx-pref-width: 200px; -fx-pref-height: 26px; -fx-font-family: Arial; -fx-font-size: 18px; -fx-font-weight: bold;" onAction="#returnBook"/>
             </HBox>
 
             <HBox alignment="CENTER">

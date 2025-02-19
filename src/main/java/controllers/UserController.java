@@ -26,7 +26,13 @@ public class UserController {
 
     private final UserDAO userDAO = new UserDAO();
     private final AdminDAO adminDAO = new AdminDAO();
+    private static User userLoggedIn = null;
 
+    public static void setUserLoggedIn(User user) {
+        userLoggedIn.setUsername(user.getUsername());
+        userLoggedIn.setPassword(user.getPassword());
+        userLoggedIn.setId(user.getId());
+    }
     @FXML
     protected void userLogin(ActionEvent e) {
         try {
@@ -109,7 +115,6 @@ public class UserController {
         boolean success = userDAO.borrowBook(book, book2);
         showAlert(success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR, success ? "Success" : "Error", success ? "Book borrowed successfully." : "Book is not available.");
     }
-
     @FXML
     protected void returnBook() {
         String ISBNText = returnISBN.getText();

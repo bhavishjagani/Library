@@ -1,12 +1,10 @@
 package models;
 import java.sql.Timestamp;
-
 public class BorrowedBooks {
     private int id;
     private int userID;
     private int bookID;
     private Timestamp borrowDate;
-    private Timestamp returnDate;
 
     public int getId() {
         return id;
@@ -31,11 +29,5 @@ public class BorrowedBooks {
     }
     public void setBorrowDate(Timestamp borrowDate) {
         this.borrowDate = borrowDate;
-    }
-    public Timestamp getReturnDate() {
-        return returnDate;
-    }
-    public void setReturnDate(Timestamp returnDate) {
-        this.returnDate = returnDate;
     }
 }

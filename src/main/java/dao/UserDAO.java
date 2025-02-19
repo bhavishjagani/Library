@@ -43,15 +43,24 @@ public class UserDAO {
     public boolean borrowBook(BorrowedBooks book, Book book2) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "UPDATE BOOKS SET STATUS = 'borrowed', QUANTITY=QUANTITY-1 WHERE ISBN=?";
+            String checkUser = "SELECT ID FROM USERS WHERE ID=?";
             PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement statement3 = connection.prepareStatement(checkUser);
             statement.setString(1, book2.getISBN());
+            statement3.setInt(1, book.getId());
+            ResultSet userResult = statement3.executeQuery();
+            if (! userResult.next()) {
+                System.out.println("User ID does not exist.");
+                return false;
+            }
             if (statement.executeUpdate() > 0) {
                 System.out.println("Book has been borrowed successfully.");
-                String query2 = "INSERT INTO BORROWEDBOOKS (USER_ID, BOOK_ID, BORROW_DATE) VALUES (?, ?, ?)";
+                String query2 = "INSERT INTO BORROWEDBOOKS (ID, USER_ID, BOOK_ID, BORROW_DATE) VALUES (?, ?, ?, ?)";
                 PreparedStatement statement2 = connection.prepareStatement(query2);
-                statement2.setInt(1, book.getUserID());
-                statement2.setInt(2, book.getBookID());
-                statement2.setTimestamp(3, book.getBorrowDate());
+                statement2.setInt(1, book.getId());
+                statement2.setInt(2, book.getUserID());
+                statement2.setInt(3, book.getBookID());
+                statement2.setTimestamp(4, book.getBorrowDate());
                 statement2.executeUpdate();
                 return true;
             }

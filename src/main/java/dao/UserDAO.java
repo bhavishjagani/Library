@@ -2,6 +2,7 @@ package dao;
 import models.*;
 import utils.DatabaseConnector;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 public class UserDAO {
@@ -39,13 +40,19 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
-    public boolean borrowBook(Book book) {
+    public boolean borrowBook(BorrowedBooks book, Book book2) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "UPDATE BOOKS SET STATUS = 'borrowed', QUANTITY=QUANTITY-1 WHERE ISBN=?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, book.getISBN());
+            statement.setString(1, book2.getISBN());
             if (statement.executeUpdate() > 0) {
                 System.out.println("Book has been borrowed successfully.");
+                String query2 = "INSERT INTO BORROWEDBOOKS (USER_ID, BOOK_ID, BORROW_DATE) VALUES (?, ?, ?)";
+                PreparedStatement statement2 = connection.prepareStatement(query2);
+                statement2.setInt(1, book.getUserID());
+                statement2.setInt(2, book.getBookID());
+                statement2.setTimestamp(3, book.getBorrowDate());
+                statement2.executeUpdate();
                 return true;
             }
             System.out.println("Book is either not available or ISBN is incorrect.");
@@ -55,6 +62,7 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
+
     public boolean returnBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "UPDATE BOOKS SET STATUS = 'available', QUANTITY=QUANTITY+1 WHERE ISBN=?";
@@ -82,6 +90,27 @@ public class UserDAO {
                 book.setISBN(resultSet.getString("ISBN"));
                 book.setTitle(resultSet.getString("TITLE"));
                 book.setAuthor(resultSet.getString("AUTHOR"));
+                books.add(book);
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return books;
+    }
+    public List<BorrowedBooks> getBorrowedBooks() {
+        ArrayList<BorrowedBooks> books = new ArrayList<>();
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            String query = "SELECT * FROM BORROWEDBOOKS";
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                BorrowedBooks book = new BorrowedBooks();
+                book.setId(resultSet.getInt("ID"));
+                book.setUserID(resultSet.getInt("USER_ID"));
+                book.setBookID(resultSet.getInt("BOOK_ID"));
+                book.setBorrowDate(resultSet.getTimestamp("BORROW_DATE"));
+                book.setReturnDate(resultSet.getTimestamp("RETURN_DATE"));
                 books.add(book);
             }
         }

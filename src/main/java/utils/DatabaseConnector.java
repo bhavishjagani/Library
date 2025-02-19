@@ -11,6 +11,7 @@ public class DatabaseConnector {
             Connection connection = DriverManager.getConnection(URL, user, password);
             createUserTable(connection);
             createBookTable(connection);
+            createBorrowBookTable(connection);
             return connection;
         }
         catch (SQLException e) {
@@ -25,10 +26,13 @@ public class DatabaseConnector {
         String query = "CREATE TABLE IF NOT EXISTS BOOKS (ID INT AUTO_INCREMENT PRIMARY KEY, ISBN VARCHAR (13), TITLE VARCHAR (250), AUTHOR VARCHAR (100), QUANTITY INT DEFAULT 1, STATUS VARCHAR (10) DEFAULT 'available')";
         codeReducer(connection, query);
     }
+    public static void createBorrowBookTable(Connection connection) throws SQLException {
+        String query = "CREATE TABLE IF NOT EXISTS BORROWEDBOOKS (ID INT AUTO_INCREMENT PRIMARY KEY, USER_ID INT NOT NULL, BOOK_ID INT NOT NULL, BORROW_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP, RETURN_DATE TIMESTAMP NULL, FOREIGN KEY (USER_ID) REFERENCES USERS (ID) ON DELETE CASCADE, FOREIGN KEY (BOOK_ID) REFERENCES BOOKS (ID) ON DELETE CASCADE)";
+        codeReducer(connection, query);
+    }
     public static void codeReducer(Connection connection, String createTableQuery) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            String query = createTableQuery;
-            statement.executeUpdate(query);
+            statement.executeUpdate(createTableQuery);
         }
         catch (Exception e) {
             e.printStackTrace();

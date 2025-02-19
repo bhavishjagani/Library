@@ -93,15 +93,20 @@ public class UserController {
         backToUserLogin(e);
     }
     @FXML
+    protected void borrowHistory() {
+
+    }
+    @FXML
     protected void borrowBook() {
         String ISBNText = borrowISBN.getText();
         if (ISBNText.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Please enter a book ISBN to borrow.");
             return;
         }
-        Book book = new Book();
-        book.setISBN(ISBNText);
-        boolean success = userDAO.borrowBook(book);
+        BorrowedBooks book = new BorrowedBooks();
+        Book book2 = new Book();
+        book2.setISBN(ISBNText);
+        boolean success = userDAO.borrowBook(book, book2);
         showAlert(success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR, success ? "Success" : "Error", success ? "Book borrowed successfully." : "Book is not available.");
     }
 
@@ -145,10 +150,6 @@ public class UserController {
     }
     @FXML
     protected void toAllBooks(ActionEvent e) throws Exception {
-//        System.out.println(bookTextField.getText());
-//        System.out.println(userDAO.getAllBooks().get(0).getTitle());
-//        String booksText = userDAO.getAllBooks().get(0).getTitle();
-//        bookTextField.setText(booksText);
         codeReducer(e, "all-books.fxml", "All Books");
     }
     @FXML

@@ -1,12 +1,9 @@
 package models;
 public class Admin {
-    private int id;
     private String username;
     private String password;
-    private String role;
 
     public void setId(int id) {
-        this.id = id;
     }
     public String getUsername() {
         return username;
@@ -21,6 +18,5 @@ public class Admin {
         this.password = password;
     }
     public void setRole(String role) {
-        this.role = role;
     }
 }

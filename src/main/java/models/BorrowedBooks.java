@@ -1,10 +1,7 @@
 package models;
-import java.sql.Timestamp;
 public class BorrowedBooks {
     private int id;
     private int userID;
-    private int bookID;
-    private Timestamp borrowDate;
 
     public int getId() {
         return id;
@@ -15,19 +12,7 @@ public class BorrowedBooks {
     public int getUserID() {
         return userID;
     }
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-    public int getBookID() {
-        return bookID;
-    }
-    public void setBookID(int bookID) {
-        this.bookID = bookID;
-    }
-    public Timestamp getBorrowDate() {
-        return borrowDate;
-    }
-    public void setBorrowDate(Timestamp borrowDate) {
-        this.borrowDate = borrowDate;
+    public void setUserId(int id) {
+        this.userID=id;
     }
 }

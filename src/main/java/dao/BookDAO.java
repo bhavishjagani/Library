@@ -2,6 +2,7 @@ package dao;
 import models.Book;
 import utils.DatabaseConnector;
 import java.sql.*;
+import java.util.List;
 
 public class BookDAO {
     public void addBook(Book book) {
@@ -65,4 +66,7 @@ public class BookDAO {
         }
         return null;
     }
+
+    // Implement a model like User.java, Book.java, create model for BorrowBook History, whatever fields I want to display, holding data, data used in bookDAO, bookController
+    // Write query to get data
 }

@@ -2,7 +2,6 @@ package dao;
 import models.*;
 import utils.DatabaseConnector;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 public class UserDAO {
@@ -40,38 +39,61 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
-    public boolean borrowBook(BorrowedBooks book, Book book2) {
+    public boolean borrowBook(BorrowedBooks borrowedBook, Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "UPDATE BOOKS SET STATUS = 'borrowed', QUANTITY=QUANTITY-1 WHERE ISBN=?";
-            String checkUser = "SELECT ID FROM USERS WHERE ID=?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            PreparedStatement statement3 = connection.prepareStatement(checkUser);
-            statement.setString(1, book2.getISBN());
-            statement3.setInt(1, book.getId());
-            ResultSet userResult = statement3.executeQuery();
-            if (! userResult.next()) {
-                System.out.println("User ID does not exist.");
+
+            // Step 1: Get the Book ID using the provided ISBN
+            String getBookIdQuery = "SELECT ID FROM BOOKS WHERE ISBN = ?";
+            PreparedStatement bookIdStatement = connection.prepareStatement(getBookIdQuery);
+            bookIdStatement.setString(1, book.getISBN());
+            ResultSet bookResultSet = bookIdStatement.executeQuery();
+
+            if (!bookResultSet.next()) {
+                System.out.println("No book found with ISBN: " + book.getISBN());
                 return false;
             }
-            if (statement.executeUpdate() > 0) {
-                System.out.println("Book has been borrowed successfully.");
-                String query2 = "INSERT INTO BORROWEDBOOKS (ID, USER_ID, BOOK_ID, BORROW_DATE) VALUES (?, ?, ?, ?)";
-                PreparedStatement statement2 = connection.prepareStatement(query2);
-                statement2.setInt(1, book.getId());
-                statement2.setInt(2, book.getUserID());
-                statement2.setInt(3, book.getBookID());
-                statement2.setTimestamp(4, book.getBorrowDate());
-                statement2.executeUpdate();
+
+            int bookId = bookResultSet.getInt("ID"); // Get the correct book ID
+            book.setBookID(bookId);
+
+            // Step 2: Check if the User ID exists
+            String checkUserQuery = "SELECT ID FROM USERS WHERE ID = ?";
+            PreparedStatement userCheckStatement = connection.prepareStatement(checkUserQuery);
+            userCheckStatement.setInt(1, borrowedBook.getUserID());
+            ResultSet userResultSet = userCheckStatement.executeQuery();
+
+            if (!userResultSet.next()) {
+                System.out.println("User ID " + borrowedBook.getUserID() + " does not exist.");
+                return false;
+            }
+
+            // Step 3: Update the book status and reduce quantity by 1
+            String updateBookQuery = "UPDATE BOOKS SET STATUS = 'borrowed', QUANTITY = QUANTITY - 1 WHERE ID = ? AND QUANTITY > 0";
+            PreparedStatement updateBookStatement = connection.prepareStatement(updateBookQuery);
+            updateBookStatement.setInt(1, bookId);
+
+            if (updateBookStatement.executeUpdate() > 0) {
+                System.out.println("Book with ID " + bookId + " has been borrowed by User ID: " + borrowedBook.getUserID());
+
+                // Step 4: Insert into the BorrowedBooks table
+                String insertBorrowedBookQuery = "INSERT INTO BORROWEDBOOKS (USER_ID, BOOK_ID, BORROW_DATE) VALUES (?, ?, ?)";
+                PreparedStatement insertBorrowedBookStatement = connection.prepareStatement(insertBorrowedBookQuery);
+                insertBorrowedBookStatement.setInt(1, borrowedBook.getUserID());
+                insertBorrowedBookStatement.setInt(2, bookId); // Correct book ID
+                insertBorrowedBookStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+                insertBorrowedBookStatement.executeUpdate();
                 return true;
             }
-            System.out.println("Book is either not available or ISBN is incorrect.");
-            return false;
+            else {
+                System.out.println("Book is not available or ISBN is incorrect.");
+            }
+
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return false;
     }
-
     public boolean returnBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             String query = "UPDATE BOOKS SET STATUS = 'available', QUANTITY=QUANTITY+1 WHERE ISBN=?";
@@ -107,25 +129,23 @@ public class UserDAO {
         }
         return books;
     }
-    public List<BorrowedBooks> getBorrowedBooks() {
-        ArrayList<BorrowedBooks> books = new ArrayList<>();
-        try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "SELECT * FROM BORROWEDBOOKS";
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                BorrowedBooks book = new BorrowedBooks();
-                book.setId(resultSet.getInt("ID"));
-                book.setUserID(resultSet.getInt("USER_ID"));
-                book.setBookID(resultSet.getInt("BOOK_ID"));
-                book.setBorrowDate(resultSet.getTimestamp("BORROW_DATE"));
-                book.setReturnDate(resultSet.getTimestamp("RETURN_DATE"));
-                books.add(book);
+    public User getUserByUsername(String username) {
+        User user = null;
+        String query = "SELECT * FROM USERS WHERE USERNAME = ?";
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("ID"));
+                user.setUsername(resultSet.getString("USERNAME"));
+                user.setPassword(resultSet.getString("PASSWORD"));
             }
         }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+        catch (SQLException e) {
+            e.printStackTrace();
         }
-        return books;
+        return user;
     }
 }

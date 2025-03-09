@@ -94,6 +94,10 @@ public class BookController {
         codeReducer(e, "search-book.fxml", "Search Book");
     }
     @FXML
+    protected void toBorrowBookHistory(ActionEvent e) throws Exception {
+        codeReducer(e, "borrow-book-history.fxml", "Borrow Book History");
+    }
+    @FXML
     protected void backToAdminLogin(ActionEvent e) throws Exception {
         codeReducer(e, "admin-login.fxml", "Admin Login");
     }

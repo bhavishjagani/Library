@@ -47,7 +47,7 @@ public class BorrowBookController {
     }
     @FXML
     protected void backToAdminBookManagement(ActionEvent e) throws Exception {
-        codeReducer(e, "admin-book-management.fxml", "Admin Book Management");
+        codeReducer(e, "admin-book-management.fxml", "Admin Book Manageent");
     }
     @FXML
     protected void codeReducer(ActionEvent e, String className, String title) throws IOException {

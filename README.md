@@ -39,6 +39,45 @@ the table will display the books that fill the criteria.
 
 These are all the functions for the user.
 
+Back to the starting page, there is also an admin login page. If clicked, this redirects you to another page for the login of an admin user, which is exactly like how the user login works.
+
+![image](https://github.com/user-attachments/assets/dfcf829b-6a8f-4a3a-a5be-2eb1c335c2c4)
+
+After the login is validated, the admin user is taken to a page for their functions.
+
+![image](https://github.com/user-attachments/assets/fb343911-a779-4fbd-97a2-198d1b021d2f)
+This is a picture of the page of the admin book management.
+
+The first button is called Borrow Book History. As the name says, when clicked, it leads the admin to another page where they can see which user borrowed (or returned) what book at what time.
+![image](https://github.com/user-attachments/assets/36888332-f191-4306-a53d-5e1cae48bd6d)
+
+The next button is called add book. If clicked, it also redirects the admin to another page where they have to fill out 3 fields (ISBN, Title, and Author), and if the add book button is clicked,
+then the database and all other tables using book will now include this information.
+
+![image](https://github.com/user-attachments/assets/3715975d-1f1b-4230-8172-f9ce58b35bd6)
+
+The next button is called update book. If clicked, it redirects the admin to another page where they can update the information of a book. They have to enter the ISBN, and then they can enter
+a new book title or author, and if the update book button is clicked, it will grab the book with that ISBN and update the corresponding information.
+
+![image](https://github.com/user-attachments/assets/1d70d4a6-c56b-493f-8cc1-fe069f08f85a)
+
+The next button is called remove book. If clicked, it redirects the admin to another page where they have to enter the ISBN of a book, and if it is correct, the book will be removed from all tables
+and databases.
+
+![image](https://github.com/user-attachments/assets/ed8ef1d0-4c5b-4c12-9130-1deed3452aa5)
+
+The final button for the admin is called search book. If the admin enters the ISBN of the book and clicks the search book button, it will display the title and the author of the book in two uneditable
+text fields.
+
+![image](https://github.com/user-attachments/assets/5137715f-b41b-4535-a479-0503e95c12cd)
+
+These are all the functions for the admin user, and this is what this Library Management System application does.
+
+
+
+
+
+
 
 
 

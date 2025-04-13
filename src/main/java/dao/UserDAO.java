@@ -118,15 +118,17 @@ public class UserDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Book book = new Book();
-                book.setISBN(resultSet.getString("ISBN"));
+                book.setId(resultSet.getInt("ID"));
                 book.setTitle(resultSet.getString("TITLE"));
                 book.setAuthor(resultSet.getString("AUTHOR"));
+                book.setQuantity(resultSet.getInt("QUANTITY"));
                 books.add(book);
             }
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+        System.out.println(books);
         return books;
     }
     public User getUserByUsername(String username) {
@@ -147,5 +149,46 @@ public class UserDAO {
             e.printStackTrace();
         }
         return user;
+    }
+    public Book searchBookTitle(String ISBN) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            String query = "SELECT * FROM BOOKS WHERE ISBN=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, ISBN);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Book book = new Book();
+                book.setISBN(resultSet.getString("ISBN"));
+                book.setTitle(resultSet.getString("TITLE"));
+                book.setAuthor(resultSet.getString("AUTHOR"));
+                book.setQuantity(resultSet.getInt("QUANTITY"));
+                return book;
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public Book searchBookAuthor(String ISBN) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            String query = "SELECT * FROM BOOKS WHERE ISBN=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, ISBN);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Book book = new Book();
+                book.setISBN(resultSet.getString("ISBN"));
+                book.setTitle(resultSet.getString("TITLE"));
+                book.setAuthor(resultSet.getString("AUTHOR"));
+                book.setQuantity(resultSet.getInt("QUANTITY"));
+                return book;
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

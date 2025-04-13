@@ -1,20 +1,23 @@
 package models;
 
-public class Book {
-    private int id;
-    private String ISBN;
+public class AllBooks {
+    private int bookid;
     private String title;
     private String author;
     private int quantity;
 
-    public int getId() {
-        return id;
+    public AllBooks(int bookid, String title, String author, int quantity) {
+        this.bookid = bookid;
+        this.title = title;
+        this.author = author;
+        this.quantity = quantity;
     }
-    public String getISBN() {
-        return ISBN;
+
+    public int getBookid() {
+        return bookid;
     }
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setBookid(int bookid) {
+        this.bookid = bookid;
     }
     public String getTitle() {
         return title;
@@ -28,16 +31,10 @@ public class Book {
     public void setAuthor(String author) {
         this.author = author;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
     public int getQuantity() {
         return quantity;
     }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-    public void setBookID(int bookId) {
-        this.id=bookId;
     }
 }

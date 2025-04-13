@@ -18,6 +18,7 @@ import models.BorrowBookHistory;
 import javafx.collections.FXCollections;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.ArrayList;
 
 public class BorrowBookController {
     @FXML
@@ -37,17 +38,31 @@ public class BorrowBookController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("idColumn"));
-        ISBNColumn.setCellValueFactory(new PropertyValueFactory<>("ISBNColumn"));
-        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userIdColumn"));
-        borrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDateColumn"));
-        returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDateColumn"));
-        ObservableList<BorrowBookHistory> borrowedBooks = FXCollections.observableArrayList(borrowBookHistoryDAO.getUserBorrowHistory());
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        ISBNColumn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        borrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
+
+        ArrayList<BorrowBookHistory> borrowHistoryList = (ArrayList<BorrowBookHistory>) borrowBookHistoryDAO.getUserBorrowHistory();
+
+        // Debug print statements
+//        System.out.println("Borrow History Records Count: " + borrowHistoryList.size());
+//        for (BorrowBookHistory history : borrowHistoryList) {
+//            System.out.println("Record: ID=" + history.getId() +
+//                    ", ISBN=" + history.getISBN() +
+//                    ", User ID=" + history.getUserId() +
+//                    ", Borrow Date=" + history.getBorrowDate() +
+//                    ", Return Date=" + history.getReturnDate());
+//        }
+
+        ObservableList<BorrowBookHistory> borrowedBooks = FXCollections.observableArrayList(borrowHistoryList);
         borrowHistoryTable.setItems(borrowedBooks);
+        borrowHistoryTable.refresh();  // 👈 **FORCE REFRESH**
     }
     @FXML
     protected void backToAdminBookManagement(ActionEvent e) throws Exception {
-        codeReducer(e, "admin-book-management.fxml", "Admin Book Manageent");
+        codeReducer(e, "admin-book-management.fxml", "Admin Book Management");
     }
     @FXML
     protected void codeReducer(ActionEvent e, String className, String title) throws IOException {
@@ -58,11 +73,5 @@ public class BorrowBookController {
         stage.show();
         Stage previousStage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         previousStage.close();
-    }
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

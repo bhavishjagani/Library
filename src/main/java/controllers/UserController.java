@@ -1,7 +1,8 @@
 package controllers;
-
 import com.library.library.Main;
 import dao.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,11 +10,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import models.*;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class UserController {
@@ -24,8 +27,6 @@ public class UserController {
     @FXML
     private PasswordField reenterPassword;
     @FXML
-    private TextArea bookTextField = new TextArea();
-    @FXML
     private TextField borrowISBN;
     @FXML
     private TextField returnISBN;
@@ -34,6 +35,7 @@ public class UserController {
     private final AdminDAO adminDAO = new AdminDAO();
     private final BorrowBookHistoryDAO borrowBookHistoryDAO = new BorrowBookHistoryDAO();
     private static User userLoggedIn = null;
+
 
     @FXML
     protected void userLogin(ActionEvent e) {
@@ -177,14 +179,9 @@ public class UserController {
     protected void toAdminLogin(ActionEvent e) throws Exception {
         codeReducer(e, "admin-login.fxml", "Admin Book Management");
     }
-
     @FXML
-    public void initialize() {
-        if (bookTextField != null && !userDAO.getAllBooks().isEmpty()) {
-            for (int i = 0; i < userDAO.getAllBooks().size(); i++) {
-                bookTextField.appendText("\n" + userDAO.getAllBooks().get(i).getTitle() + " : " + userDAO.getAllBooks().get(i).getAuthor());
-            }
-        }
+    protected void filterBook(ActionEvent e) throws Exception {
+        codeReducer(e, "filter-book.fxml", "Filter Book");
     }
 
     @FXML

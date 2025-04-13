@@ -12,7 +12,7 @@ public class BookDAO {
             statement.setString(1, book.getISBN());
             statement.setString(2, book.getTitle());
             statement.setString(3, book.getAuthor());
-            statement.setInt(4, book.getQuantity());
+            statement.setInt(4, book.getQuantity()+1);
             statement.executeUpdate();
         }
         catch (Exception e) {
@@ -21,14 +21,12 @@ public class BookDAO {
     }
     public void updateBook(Book book) {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            String query = "UPDATE BOOKS SET TITLE=?, AUTHOR=?, QUANTITY=?, WHERE ISBN=?";
-            System.out.println(book.getISBN());
+            String query = "UPDATE BOOKS SET TITLE=?, AUTHOR=?, QUANTITY=? WHERE ISBN=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
             statement.setInt(3, book.getQuantity());
             statement.setString(4, book.getISBN());
-            System.out.println(book.getISBN());
             statement.executeUpdate();
         }
         catch (Exception e) {

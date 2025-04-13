@@ -21,12 +21,14 @@
     </HBox>
 
     <VBox spacing="20.0" style="-fx-padding: 20px;">
-        <TableView fx:id="borrowHistoryTable" style="-fx-pref-height: 300px;">
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="100" />
-            <TableColumn fx:id="ISBNColumn" text="ISBN" prefWidth="100" />
-            <TableColumn fx:id="userIdColumn" text="User ID" prefWidth="100" />
-            <TableColumn fx:id="borrowDateColumn" text="Borrow Date" prefWidth="150" />
-            <TableColumn fx:id="returnDateColumn" text="Return Date" prefWidth="150" />
+        <TableView fx:id="borrowHistoryTable">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="100" />
+                <TableColumn fx:id="ISBNColumn" text="ISBN" prefWidth="100" />
+                <TableColumn fx:id="userIdColumn" text="User ID" prefWidth="100" />
+                <TableColumn fx:id="borrowDateColumn" text="Borrow Date" prefWidth="150" />
+                <TableColumn fx:id="returnDateColumn" text="Return Date" prefWidth="150" />
+            </columns>
         </TableView>
 
         <HBox alignment="CENTER">

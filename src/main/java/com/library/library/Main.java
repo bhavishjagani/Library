@@ -34,4 +34,4 @@ public class Main extends Application {
 //         5. Database Integration:
 //         • Use MySQL to store book and borrower data.
 
-//**Change fx:id in other fxml pages**
+//Create ReadMe, add screenshots of every page, summary of what app is, showcasing of profile
